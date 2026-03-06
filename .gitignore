@@ -1,0 +1,2 @@
+# Ignore Rails master key
+/config/master.key
