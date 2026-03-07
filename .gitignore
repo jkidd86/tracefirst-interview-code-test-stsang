@@ -1,0 +1,6 @@
+# Ignore Rails master key
+/config/master.key
+/log
+/db/*.sqlite3
+/node_modules
+/config/master.key
