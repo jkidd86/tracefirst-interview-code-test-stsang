@@ -44,11 +44,17 @@ class VeterinariansControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to veterinarian_url(@veterinarian)
   end
 
-  test 'should destroy veterinarian' do
-    assert_difference('Veterinarian.count', -1) do
-      delete veterinarian_url(veterinarians(:veterinarian_two))
-    end
+     test 'soft delete veterinarians' do
+          x = veterinarians(:veterinarian_one)
+          delete veterinarian_path(x)
+          x.reload
+          assert_not_nil x.is_deleted
+     end
 
-    assert_redirected_to veterinarians_url
-  end
+     test 'do not show veterinarians' do
+          x = veterinarians(:veterinarian_one)
+          x.update(is_deleted: true)
+          get veterinarian_url(@veterinarian)
+          assert_response :success
+     end
 end

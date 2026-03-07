@@ -3,7 +3,9 @@ class VeterinariansController < ApplicationController
   rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
   def index
-    @veterinarians = Veterinarian.all
+#     @veterinarians = Veterinarian.all
+#    ONLY SHOW Vets THAT ARE NOT DELETED
+     @veterinarians = Veterinarian.active
   end
 
   def show; end
@@ -41,7 +43,7 @@ class VeterinariansController < ApplicationController
   end
 
   def destroy
-    @veterinarian.destroy
+    @veterinarian.update(is_deleted: true) # SET NEW FIELD TO TRUE
     respond_to do |format|
       format.html { redirect_to veterinarians_url, notice: 'Veterinarian was successfully destroyed.' }
       format.json { head :no_content }

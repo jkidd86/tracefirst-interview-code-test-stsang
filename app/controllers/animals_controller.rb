@@ -3,7 +3,9 @@ class AnimalsController < ApplicationController
   rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
   def index
-    @animals = Animal.all
+#     @animals = Animal.all
+#    ONLY SHOW Animals THAT ARE NOT DELETED
+     @animals = Animal.active
   end
 
   def show; end
@@ -33,7 +35,7 @@ class AnimalsController < ApplicationController
   end
 
   def destroy
-    if @animal.destroy
+    if @animal.update(is_deleted: true) # SET NEW FIELD TO TRUE
       redirect_to animals_path, notice: 'Animal was successfully destroyed'
     else
       redirect_to animals_path, error: 'Animal could not be destroyed'
