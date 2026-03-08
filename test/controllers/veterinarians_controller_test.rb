@@ -20,7 +20,7 @@ class VeterinariansControllerTest < ActionDispatch::IntegrationTest
       post veterinarians_url, params: { veterinarian: { name: 'Karl',
                                                         status: 'available',
                                                         admin: false,
-                                                        number: '+09876589365' } }
+                                                        number: '+449876589365' } }
     end
 
     assert_redirected_to veterinarian_url(Veterinarian.last)
@@ -40,7 +40,7 @@ class VeterinariansControllerTest < ActionDispatch::IntegrationTest
     patch veterinarian_url(@veterinarian), params: { veterinarian: { name: 'Karl',
                                                                      status: 'unavailable',
                                                                      admin: false,
-                                                                     number: '+09876989365' } }
+                                                                     number: '+449876989365' } }
     assert_redirected_to veterinarian_url(@veterinarian)
   end
 
@@ -56,5 +56,20 @@ class VeterinariansControllerTest < ActionDispatch::IntegrationTest
           x.update(is_deleted: true)
           get veterinarian_url(@veterinarian)
           assert_response :success
+     end
+
+     test 'vet number is international' do
+          x = veterinarians(:veterinarian_one)
+          assert x.valid?, "Number is valid"
+     end
+
+     test 'vet number is not international' do
+          x = Veterinarian.new(
+               name: "Invalid",
+               status: "Busy",
+               admin: false,
+               number: "12345"
+          )
+          assert_not x.valid?, "Number is not international"
      end
 end
